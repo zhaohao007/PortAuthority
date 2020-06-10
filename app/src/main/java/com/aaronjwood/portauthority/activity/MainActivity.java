@@ -76,7 +76,7 @@ public final class MainActivity extends AppCompatActivity implements MainAsyncRe
     private Wireless wifi;
     private ListView hostList;
     private TextView internalIp;
-    private TextView externalIp;
+    private TextView externalIp;//外网wan ip
     private String cachedWanIp;
     private TextView signalStrength;
     private TextView ssid;
@@ -242,6 +242,7 @@ public final class MainActivity extends AppCompatActivity implements MainAsyncRe
 
     /**
      * Sets up the device's MAC address and vendor
+     * 组装设备mac和供应商
      */
     public void setupMac() {
         TextView macAddress = findViewById(R.id.deviceMacAddress);
@@ -639,12 +640,14 @@ public final class MainActivity extends AppCompatActivity implements MainAsyncRe
      * Wrapper for getting the external IP address
      * We can control whether or not to do this based on the user's preference
      * If the user doesn't want this then hide the appropriate views
+     *
+     * 通过异步和远程服务通信获取真心ip
      */
     private void getExternalIp() {
         TextView label = findViewById(R.id.externalIpAddressLabel);
         TextView ip = findViewById(R.id.externalIpAddress);
 
-        if (UserPreference.getFetchExternalIp(this)) {
+        if (UserPreference.getFetchExternalIp(this)) {//wan外网IP是否能够被抓取到
             label.setVisibility(View.VISIBLE);
             ip.setVisibility(View.VISIBLE);
 

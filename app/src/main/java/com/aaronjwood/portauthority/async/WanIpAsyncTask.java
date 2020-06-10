@@ -36,6 +36,7 @@ public class WanIpAsyncTask extends AsyncTask<Void, Void, String> {
     @Override
     @SuppressLint("NewApi")
     protected String doInBackground(Void... params) {
+        //通过向远程服务器发消息的形式，有远程服务求去的真实ip返回过来
         String error = "Couldn't get your external IP";
         OkHttpClient httpClient = new OkHttpClient();
         Request request = new Request.Builder().url(EXTERNAL_IP_SERVICE).build();

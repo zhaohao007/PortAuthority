@@ -184,7 +184,7 @@ public class UserPreference {
 
     /**
      * Gets the setting that controls whether or not the external IP should be fetched
-     *
+     * wan外网IP是否能够被抓取到
      * @param context
      * @return True if the external IP should be fetched, false if it shouldn't
      */

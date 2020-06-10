@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Port Authority</string>
+    <string name="action_settings">设置</string>
+    <string name="macAddress">MAC地址</string>
+    <string name="internalIpLabel">局域网IP</string>
+    <string name="externalIpLabel">外网IP</string>
+    <string name="fetching">抓取中...</string>
+    <string name="signalLabel">信号强度/网速</string>
+    <string name="hostDiscovery">发现主机Hosts</string>
+    <string name="ssid">ssid网络标识</string>
+    <string name="bssid">BSSID(mac或ap地址)</string>
+    <string name="scanWellKnownPorts">Скенирај познате портове</string>
+    <string name="scanPortRange">Скенирај распон портова</string>
+    <string name="resetPortRange">Ресет Порт Ранге</string>
+    <string name="openPorts">Отворени портови</string>
+    <string name="portRangeStart">Почетни</string>
+    <string name="portRangeStop">Крајњи</string>
+    <string name="macVendor">mac设备供应商</string>
+    <string name="wifiDisabled">WiFi不可用</string>
+    <string name="noWifiConnection">没有wifi连接</string>
+    <string name="wanHostHint">УРЛ адреса/ИП-</string>
+    <string name="scanningWarning">УПОЗОРЕЊЕ</string>
+    <string name="getMacVendorFailed">mac设备供应商获取失败</string>
+    <string name="scanningDisclaimer">
+        Имајте на уму да је трчање порт скенови против јавних серверима обично сматра злонамерни .
+        Осим тога , ради овакве скенирања преко мреже вашег оператера, уместо вашег ВиФи конекције понекад произвести нетачне резултате због траффиц схапинг .
+        Ваш превозник може узети у обзир саобраћај током овог прегледа да је злонамеран .
+    </string>
+
+</resources>
