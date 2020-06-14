@@ -124,8 +124,11 @@ public final class MainActivity extends AppCompatActivity implements MainAsyncRe
 
         setContentView(R.layout.activity_main);
 
+        //内网ip
         internalIp = findViewById(R.id.internalIpAddress);
+        //外网ip
         externalIp = findViewById(R.id.externalIpAddress);
+        //信号强度
         signalStrength = findViewById(R.id.signalStrength);
         ssid = findViewById(R.id.ssid);
         bssid = findViewById(R.id.bssid);
@@ -137,15 +140,16 @@ public final class MainActivity extends AppCompatActivity implements MainAsyncRe
         wifi = new Wireless(context);
         scanHandler = new Handler(Looper.getMainLooper());
 
-        checkDatabase();
+        checkDatabase();//是否下载OUI数据
         db = Database.getInstance(context);
 
         setupHostsAdapter();
-        setupDrawer();
+        setupDrawer();//初始化左侧抽屉
         setupHostDiscovery();
 
         intentFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
 
+        //不同Android版本访问wifi权限
         ssidAccess(context);
     }
 
@@ -302,7 +306,7 @@ public final class MainActivity extends AppCompatActivity implements MainAsyncRe
 
                 int numSubnetHosts;
                 try {
-                    numSubnetHosts = wifi.getNumberOfHostsInWifiSubnet();
+                    numSubnetHosts = wifi.getNumberOfHostsInWifiSubnet();//获取子网数量
                 } catch (Wireless.NoWifiManagerException e) {
                     Errors.showError(context, resources.getString(R.string.failedSubnetHosts));
                     return;
@@ -324,7 +328,8 @@ public final class MainActivity extends AppCompatActivity implements MainAsyncRe
                 scanProgressDialog.show();
 
                 try {
-                    Integer ip = wifi.getInternalWifiIpAddress(Integer.class);
+                    Integer ip = wifi.getInternalWifiIpAddress(Integer.class);//内网IP地址
+                    //启动内网主机发现线程
                     new ScanHostsAsyncTask(MainActivity.this, db).execute(ip, wifi.getInternalWifiSubnet(), UserPreference.getHostSocketTimeout(context));
                     discoverHostsBtn.setAlpha(.3f);
                     discoverHostsBtn.setEnabled(false);
@@ -516,6 +521,7 @@ public final class MainActivity extends AppCompatActivity implements MainAsyncRe
 
     /**
      * Sets up event handlers and items for the left drawer
+     * 左侧抽屉
      */
     private void setupDrawer() {
         final DrawerLayout leftDrawer = findViewById(R.id.leftDrawer);

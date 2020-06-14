@@ -227,6 +227,7 @@ public class UserPreference {
 
     /**
      * Gets the socket timeout that's used when scanning for hosts on the LAN
+     * 局域网内浏览主机超时时间
      *
      * @param context
      * @return Socket timeout

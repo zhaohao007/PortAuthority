@@ -146,6 +146,9 @@ public class Wireless {
     /**
      * Gets the Wifi Manager DHCP information and returns the Netmask of the internal Wifi Network as an int
      *
+     * DHCP：局域网内动态分配连接设备ip地址的网络协议
+     *
+     * 获取Wifi管理器DHCP信息 以int形式返回内部Wifi网络的网络掩码
      * @return Internal Wifi Subnet Netmask
      */
     public int getInternalWifiSubnet() throws NoWifiManagerException {
@@ -159,7 +162,8 @@ public class Wireless {
             return 0;
         }
 
-        int netmask = Integer.bitCount(dhcpInfo.netmask);
+        //子网掩码
+        int netmask = Integer.bitCount(dhcpInfo.netmask);//方法用于统计二进制中1的个数。
         /*
          * Workaround for #82477
          * https://code.google.com/p/android/issues/detail?id=82477
@@ -176,7 +180,7 @@ public class Wireless {
 
                 for (InterfaceAddress address : networkInterface.getInterfaceAddresses()) {
                     if (inetAddress != null && inetAddress.equals(address.getAddress())) {
-                        return address.getNetworkPrefixLength(); // This returns a short of the CIDR notation.
+                        return address.getNetworkPrefixLength(); //返回此地址的网络前缀长度。网络前缀长度在 ipv4 地址上下文中也称为子网掩码。典型的 ipv4 值是 8 (255.0.0.0)、16 (255.255.0.0) 或 24 (255.255.255.0)。 This returns a short of the CIDR notation.
                     }
                 }
             } catch (SocketException | UnknownHostException ignored) {
@@ -189,7 +193,7 @@ public class Wireless {
 
     /**
      * Returns the number of hosts in the subnet.
-     *
+     * 返回子网中的主机数量
      * @return Number of hosts as an integer.
      */
     public int getNumberOfHostsInWifiSubnet() throws NoWifiManagerException {
@@ -204,7 +208,7 @@ public class Wireless {
 
     /**
      * Gets the device's internal LAN IP address associated with the cellular network
-     *
+     * 获取与蜂窝网络相关联的设备内部LAN IP地址
      * @return Local cellular network LAN IP address
      */
     public static String getInternalMobileIpAddress() {

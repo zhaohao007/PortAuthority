@@ -28,10 +28,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import jcifs.netbios.NbtAddress;
 
 public class ScanHostsAsyncTask extends AsyncTask<Integer, Void, Void> {
-    private final WeakReference<MainAsyncResponse> delegate;
+    private final WeakReference<MainAsyncResponse> delegate;//被弱引用的对象
     private Database db;
     private static final String ARP_TABLE = "/proc/net/arp";
-    private static final String IP_CMD = "ip neighbor";
+    private static final String IP_CMD = "ip neighbor";//ARP地址表相关
     private static final String NEIGHBOR_INCOMPLETE = "INCOMPLETE";
     private static final String NEIGHBOR_FAILED = "FAILED";
     private static final String ARP_INCOMPLETE = "0x0";
@@ -50,44 +50,48 @@ public class ScanHostsAsyncTask extends AsyncTask<Integer, Void, Void> {
 
     /**
      * Scans for active hosts on the network
-     *
+     *  用于执行较为费时的操作，此方法将接收输入参数和返回计算结果。在执行过程中可以调用publishProgress(Progress... values)来更新进度信息。
      * @param params IP address
      */
     @Override
     protected Void doInBackground(Integer... params) {
-        int ipv4 = params[0];
-        int cidr = params[1];
-        int timeout = params[2];
+        int ipv4 = params[0];//内网IP地址
+        int cidr = params[1];//子网掩码数量
+        int timeout = params[2];//超时时间
         MainAsyncResponse activity = delegate.get();
 
         // Android 10+ doesn't let us access the ARP table.
         // Do an early check to see if we can get what we need from the system.
         // https://developer.android.com/about/versions/10/privacy/changes#proc-net-filesystem
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {//android10+以上
             try {
                 Process ipProc = Runtime.getRuntime().exec(IP_CMD);
-                ipProc.waitFor();
-                if (ipProc.exitValue() != 0) {
-                    activity.processFinish(new IOException("Unable to access ARP entries"));
+                ipProc.waitFor();//返回该Process对象代表的进程的出口值，值0表示正常退出，非0非正常。
+                if (ipProc.exitValue() != 0) {//返回该Process对象代表的进程的出口值，值0表示正常退出，非0非正常。关于该方法，应该是返回System.exit(int)方法中的参数。
+
+                    //地址解析协议，即ARP（Address Resolution Protocol），是根据IP地址获取物理地址的一个TCP/IP协议。
+                    // 主机发送信息时将包含目标IP地址的ARP请求广播到局域网络上的所有主机，并接收返回消息，以此确定目标的物理地址；
+                    // 收到返回消息后将该IP地址和物理地址存入本机ARP缓存中并保留一定时间，下次请求时直接查询ARP缓存以节约资源
+                    activity.processFinish(new IOException("无法访问系统中的ARP缓存资源信息"));//Unable to access ARP entries
                     activity.processFinish(true);
 
                     return null;
                 }
             } catch (IOException | InterruptedException e) {
-                activity.processFinish(new IOException("Unable to parse ARP entries"));
+                activity.processFinish(new IOException("无法解析ARP资源"));//Unable to parse ARP entries
                 activity.processFinish(true);
             }
-        } else {
+        } else {//Android 10以下直接访问ARP的
             File file = new File(ARP_TABLE);
             if (!file.exists()) {
-                activity.processFinish(new FileNotFoundException("Unable to find ARP table"));
+                activity.processFinish(new FileNotFoundException("无法找到系统ARP资源"));//Unable to find ARP table
                 activity.processFinish(true);
 
                 return null;
             }
 
             if (!file.canRead()) {
-                activity.processFinish(new IOException("Unable to read ARP table"));
+                activity.processFinish(new IOException("不能读取ARP资源"));//Unable to read ARP table
                 activity.processFinish(true);
             }
         }
@@ -129,7 +133,7 @@ public class ScanHostsAsyncTask extends AsyncTask<Integer, Void, Void> {
      * Don't update the UI in onPostExecute since we want to do multiple UI updates here
      * onPostExecute seems to perform all UI updates at once which would hinder what we're doing here
      * TODO: this method is gross, refactor it and break it up
-     *
+     * 在调用publishProgress(Progress... values)时，此方法被执行，直接将进度信息更新到UI组件上。
      * @param params
      */
     @Override
@@ -138,10 +142,10 @@ public class ScanHostsAsyncTask extends AsyncTask<Integer, Void, Void> {
         final MainAsyncResponse activity = delegate.get();
         ExecutorService executor = Executors.newCachedThreadPool();
         final AtomicInteger numHosts = new AtomicInteger(0);
-        List<Pair<String, String>> pairs = new ArrayList<>();
+        List<Pair<String, String>> pairs = new ArrayList<>();//Pair可以认为对象
 
         try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {//Android 10+
                 Process ipProc = Runtime.getRuntime().exec(IP_CMD);
                 ipProc.waitFor();
                 if (ipProc.exitValue() != 0) {

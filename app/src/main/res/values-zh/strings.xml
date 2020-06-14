@@ -9,6 +9,8 @@
     <string name="fetching">抓取中...</string>
     <string name="signalLabel">信号强度/网速</string>
     <string name="hostDiscovery">发现主机Hosts</string>
+    <string name="hostScan">正在寻找主机设备...</string>
+    <string name="subnetHosts">%1$d 个主机 在你的网络中</string>
     <string name="ssid">ssid网络标识</string>
     <string name="bssid">BSSID(mac或ap地址)</string>
     <string name="scanWellKnownPorts">Скенирај познате портове</string>
@@ -29,4 +31,5 @@
         Ваш превозник може узети у обзир саобраћај током овог прегледа да је злонамеран .
     </string>
 
+    <string name="failedSubnetHosts">未能获得子网中的主机数量</string>
 </resources>
